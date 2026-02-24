@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
 小宇宙FM播客转文章工具
-将小宇宙FM链接转换为结构化文章
+将小宇宙FM链接转换为自然流畅的文章
 """
 
 import re
 import json
 import subprocess
 import sys
-import urllib.parse
 
 def extract_episode_id(url):
     """从URL中提取episode ID"""
@@ -49,15 +48,13 @@ def parse_content(raw_content):
     duration_match = re.search(r'(\d+分钟)', raw_content)
     duration = duration_match.group(1) if duration_match else "未知时长"
     
-    # 提取Show Notes和Transcript (Markdown Content之后的内容)
+    # 提取Transcript (Markdown Content之后的内容)
     transcript_section = ""
     if "Markdown Content:" in raw_content:
         transcript_section = raw_content.split("Markdown Content:")[1]
     
     # 清理内容
-    # 移除图片链接
     transcript_section = re.sub(r'!\[Image[^\]]*\]\([^)]+\)', '', transcript_section)
-    # 移除多余空白
     transcript_section = re.sub(r'\n{3,}', '\n\n', transcript_section)
     transcript_section = transcript_section.strip()
     
